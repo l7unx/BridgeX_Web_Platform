@@ -114,6 +114,11 @@ $openProjects = $stmt->fetchColumn();
                 <h3>Contact Us</h3>
                 <p>Need help? Reach out to the BridgeX team anytime.</p>
             </a>
+            <a href="reviews.php" class="action-card">
+                <div class="action-icon">⭐</div>
+                <h3>Client Reviews</h3>
+                <p>View ratings and feedback from clients.</p>
+            </a>
         </div>
     </section>
 </main>

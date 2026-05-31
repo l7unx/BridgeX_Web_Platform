@@ -300,7 +300,7 @@ $typeLabels = array(
                                         </span>
 
                                         <span class="offer-detail">
-                                            <strong>⏱ Duration:</strong> <?= htmlspecialchars($offer['duration']) ?>
+                                            <strong>⏱ Duration:</strong> <?= htmlspecialchars($offer['delivery_time']) ?>
                                         </span>
                                     </div>
 
@@ -342,11 +342,11 @@ $typeLabels = array(
                                                 <label>Rate Developer</label>
                                                 <select name="rating" required>
                                                     <option value="">Select rating</option>
-                                                    <option value="5">5 - Excellent</option>
-                                                    <option value="4">4 - Very Good</option>
-                                                    <option value="3">3 - Good</option>
-                                                    <option value="2">2 - Fair</option>
-                                                    <option value="1">1 - Poor</option>
+                                                    <option value="5">★★★★★ Excellent</option>
+                                                    <option value="4">★★★★☆ Very Good</option>
+                                                    <option value="3">★★★☆☆ Good</option>
+                                                    <option value="2">★★☆☆☆ Fair</option>
+                                                    <option value="1">★☆☆☆☆ Poor</option>
                                                 </select>
 
                                                 <textarea name="comment" rows="3" placeholder="Write your feedback..."></textarea>
