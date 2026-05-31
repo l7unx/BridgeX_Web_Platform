@@ -1,0 +1,2 @@
+// Fix redirectByRole in includes/auth.php
+// Change /bridgx/ to /bridgex/ in all routes
