@@ -119,9 +119,9 @@ function loginUser($email, $password) {
 
 function redirectByRole($role) {
     $routes = array(
-        'admin'     => '/bridgx/admin/dashboard.php',
-        'client'    => '/bridgx/client/dashboard.php',
-        'developer' => '/bridgx/developer/dashboard.php',
+        'admin'     => '/bridgex/admin/dashboard.php',
+        'client'    => '/bridgex/client/dashboard.php',
+        'developer' => '/bridgex/developer/dashboard.php',
     );
     $url = isset($routes[$role]) ? $routes[$role] : '/bridgx/index.php';
     header("Location: $url");
