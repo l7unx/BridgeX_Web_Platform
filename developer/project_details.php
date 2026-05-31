@@ -24,9 +24,9 @@ $error = '';
 
 // Handle offer submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$existingOffer) {
-    $price = trim($_POST['price'] ?? '');
-    $delivery = trim($_POST['delivery_time'] ?? '');
-    $message = trim($_POST['message'] ?? '');
+    $price = trim(isset($_POST['price']) ? $_POST['price'] : '');
+    $delivery = trim(isset($_POST['delivery_time']) ? $_POST['delivery_time'] : '');
+    $message = trim(isset($_POST['message']) ? $_POST['message'] : '');
 
     if (!$price || !$delivery || !$message) {
         $error = 'All fields are required.';
@@ -126,20 +126,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$existingOffer) {
                     <div class="form-row">
                         <div class="form-group">
                             <label>Your Price ($) <span class="required">*</span></label>
-                            <input type="number" name="price" id="price" placeholder="e.g. 500" min="1" value="<?= htmlspecialchars($_POST['price'] ?? '') ?>">
+                            <input type="number" name="price" id="price" placeholder="e.g. 500" min="1"
+                                   value="<?= htmlspecialchars(isset($_POST['price']) ? $_POST['price'] : '') ?>">
                             <span class="field-error" id="price-error"></span>
                         </div>
+
                         <div class="form-group">
                             <label>Delivery Time <span class="required">*</span></label>
-                            <input type="text" name="delivery_time" id="delivery_time" placeholder="e.g. 2 weeks" value="<?= htmlspecialchars($_POST['delivery_time'] ?? '') ?>">
+                            <input type="text" name="delivery_time" id="delivery_time" placeholder="e.g. 2 weeks"
+                                   value="<?= htmlspecialchars(isset($_POST['delivery_time']) ? $_POST['delivery_time'] : '') ?>">
                             <span class="field-error" id="delivery-error"></span>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Cover Message <span class="required">*</span></label>
-                        <textarea name="message" id="message" rows="5" placeholder="Describe your approach, experience, and why you're the best fit..."><?= htmlspecialchars($_POST['message'] ?? '') ?></textarea>
-                        <span class="field-error" id="message-error"></span>
-                    </div>
+
+                        <div class="form-group">
+                            <label>Cover Message <span class="required">*</span></label>
+                            <textarea name="message" id="message" rows="5" placeholder="Describe your approach, experience, and why you're the best fit..."><?= htmlspecialchars(isset($_POST['message']) ? $_POST['message'] : '') ?></textarea>
+                            <span class="field-error" id="message-error"></span>
+                        </div>
                     <div style="display:flex;justify-content:flex-end;">
                         <button type="submit" class="primary-btn">Submit Offer</button>
                     </div>
