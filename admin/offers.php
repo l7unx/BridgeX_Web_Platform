@@ -5,8 +5,8 @@ requireRole('admin');
 $pdo = getDB();
 
 // Filter
-$status = trim($_GET['status'] ?? '');
-$search = trim($_GET['search'] ?? '');
+$status = trim(isset($_GET['status']) ? $_GET['status'] : '');
+$search = trim(isset($_GET['search']) ? $_GET['search'] : '');
 
 $sql = "SELECT o.*, u.name AS dev_name, p.title AS project_title, p.budget AS project_budget
         FROM offers o
@@ -76,8 +76,14 @@ $offers = $stmt->fetchAll();
                     <tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:30px;">No offers found.</td></tr>
                 <?php else: ?>
                     <?php foreach ($offers as $o):
-                        $bc = match($o['status']) { 'accepted'=>'badge-accepted','rejected'=>'badge-rejected', default=>'badge-pending' };
-                    ?>
+                        if ($o['status'] === 'accepted') {
+                            $bc = 'badge-accepted';
+                        } elseif ($o['status'] === 'rejected') {
+                            $bc = 'badge-rejected';
+                        } else {
+                            $bc = 'badge-pending';
+                        }
+                        ?>
                     <tr>
                         <td><?= $o['id'] ?></td>
                         <td><?= htmlspecialchars($o['dev_name']) ?></td>
