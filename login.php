@@ -83,32 +83,6 @@ $old_email = isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '';
 
     </div>
 </div>
-
-<script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-        var valid = true;
-        var errors = document.querySelectorAll('.field-error');
-        for (var i = 0; i < errors.length; i++) {
-            errors[i].textContent = '';
-        }
-
-        var email    = document.getElementById('email').value.trim();
-        var password = document.getElementById('password').value;
-
-        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            document.getElementById('emailError').textContent = 'Invalid email format.';
-            valid = false;
-        }
-
-        if (password.length < 1) {
-            document.getElementById('passwordError').textContent = 'Please enter your password.';
-            valid = false;
-        }
-
-        if (!valid) e.preventDefault();
-    });
-</script>
-
+<script src="/bridgex/assets/js/script.js"></script>
 </body>
 </html>

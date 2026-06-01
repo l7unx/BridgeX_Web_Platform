@@ -32,5 +32,6 @@
         <p>&copy; 2026 BridgeX Platform. Web Development Course Project.</p>
     </div>
 </footer>
+<script src="/bridgex/assets/js/script.js"></script>
 </body>
 </html>

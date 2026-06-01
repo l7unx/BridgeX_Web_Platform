@@ -2,8 +2,7 @@
 require_once '../includes/auth.php';
 requireRole('client');
 
-$success = '';
-$error   = '';
+$error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title       = isset($_POST['title']) ? trim($_POST['title']) : '';
@@ -39,7 +38,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $features
             ));
 
-            $success = 'Your project has been posted successfully! Developers will contact you soon.';
+            header('Location: post_project.php?msg=posted');
+            exit;
+
         } catch (Exception $e) {
             $error = 'An error occurred while saving. Please try again.';
         }
@@ -80,8 +81,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p style="color:var(--text-muted); margin-top:10px;">Answer the following questions to help developers understand your requirements clearly.</p>
         </div>
 
-        <?php if ($success): ?>
-            <div class="alert alert-success"><?= htmlspecialchars($success) ?> <a href="my_projects.php">View My Projects →</a></div>
+        <?php if (isset($_GET['msg']) && $_GET['msg'] === 'posted'): ?>
+            <div class="alert alert-success">
+                Your project has been posted successfully! Developers will contact you soon.
+                <a href="my_projects.php">View My Projects →</a>
+            </div>
         <?php endif; ?>
 
         <?php if ($error): ?>
@@ -209,7 +213,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="footer-bottom">© 2026 BridgeX Platform — All rights reserved</div>
 </footer>
 
-<script src="../assets/js/project_form.js"></script>
+<script src="../assets/js/script.js"></script>
 </body>
 </html>
-

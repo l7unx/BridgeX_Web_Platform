@@ -120,50 +120,6 @@ $old_role  = isset($_POST['role'])  ? $_POST['role']                    : '';
 
     </div>
 </div>
-
-<script>
-    document.getElementById('registerForm').addEventListener('submit', function(e) {
-        var valid = true;
-        var errors = document.querySelectorAll('.field-error');
-        for (var i = 0; i < errors.length; i++) {
-            errors[i].textContent = '';
-        }
-
-        var name     = document.getElementById('name').value.trim();
-        var email    = document.getElementById('email').value.trim();
-        var password = document.getElementById('password').value;
-        var confirm  = document.getElementById('confirm').value;
-        var role     = document.getElementById('role').value;
-
-        if (name.length < 3) {
-            document.getElementById('nameError').textContent = 'Name must be at least 3 characters.';
-            valid = false;
-        }
-
-        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            document.getElementById('emailError').textContent = 'Invalid email format.';
-            valid = false;
-        }
-
-        if (password.length < 8) {
-            document.getElementById('passwordError').textContent = 'Password must be at least 8 characters.';
-            valid = false;
-        }
-
-        if (password !== confirm) {
-            document.getElementById('confirmError').textContent = 'Passwords do not match.';
-            valid = false;
-        }
-
-        if (!role) {
-            document.getElementById('roleError').textContent = 'Please select an account type.';
-            valid = false;
-        }
-
-        if (!valid) e.preventDefault();
-    });
-</script>
-
+<script src="/bridgex/assets/js/script.js"></script>
 </body>
 </html>

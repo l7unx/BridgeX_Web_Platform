@@ -7,8 +7,9 @@
         <img src="assets/images/slider-1.jpg" class="slider-photo active" alt="Slide 1">
         <img src="assets/images/slider-2.jpg" class="slider-photo" alt="Slide 2">
         <img src="assets/images/slider-3.jpg" class="slider-photo" alt="Slide 3">
-        <button type="button" class="slider-btn next-slide" onclick="changeSlide(1)">&#10095;</button>
+        <button type="button" class="slider-btn next-slide" onclick="changeSlider(1)">&#10095;</button>
     </div>
+
 </section>
 <section class="hero-section">
     <div class="hero-content">
@@ -99,37 +100,6 @@
     <a href="/bridgx/register.php" class="primary-btn">Create Your Account</a>
 </section>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var slides = document.querySelectorAll('.image-slider .slider-photo');
-        var current = 0;
-
-        function showSlide(index) {
-            if (slides.length === 0) return;
-
-            slides[current].classList.remove('active');
-
-            current = index;
-
-            if (current < 0) {
-                current = slides.length - 1;
-            }
-
-            if (current >= slides.length) {
-                current = 0;
-            }
-
-            slides[current].classList.add('active');
-        }
-
-        window.changeSlide = function (direction) {
-            showSlide(current + direction);
-        };
-
-        setInterval(function () {
-            showSlide(current + 1);
-        }, 5000);
-    });
-</script>
+<script src="/bridgex/assets/js/script.js"></script>
 <?php include __DIR__ . '/includes/footer.php'; ?>
 

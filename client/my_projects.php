@@ -4,9 +4,11 @@ requireRole('client');
 
 $pdo      = getDB();
 $clientId = getUserId();
-$reviewSuccess = '';
-$reviewError = '';
 
+$reviewSuccess = '';
+$reviewError   = '';
+
+// Submit review
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_review'])) {
     $projectId   = isset($_POST['project_id']) ? (int)$_POST['project_id'] : 0;
     $developerId = isset($_POST['developer_id']) ? (int)$_POST['developer_id'] : 0;
@@ -40,6 +42,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_review'])) {
     }
 }
 
+// Accept offer
+if (isset($_GET['accept']) && is_numeric($_GET['accept'])) {
+    $offerId = (int)$_GET['accept'];
+
+    $pdo->prepare("UPDATE offers SET status='accepted' WHERE id=?")
+            ->execute(array($offerId));
+
+    $pdo->prepare("
+        UPDATE projects SET status='in_progress'
+        WHERE id = (SELECT project_id FROM offers WHERE id=?) AND client_id=?
+    ")->execute(array($offerId, $clientId));
+
+    $viewOffers = isset($_GET['view_offers']) ? (int)$_GET['view_offers'] : 0;
+
+    if ($viewOffers > 0) {
+        header('Location: my_projects.php?view_offers=' . $viewOffers . '&msg=accepted');
+    } else {
+        header('Location: my_projects.php?msg=accepted');
+    }
+    exit;
+}
+
+// Reject offer
+if (isset($_GET['reject']) && is_numeric($_GET['reject'])) {
+    $offerId = (int)$_GET['reject'];
+
+    $pdo->prepare("UPDATE offers SET status='rejected' WHERE id=?")
+            ->execute(array($offerId));
+
+    $viewOffers = isset($_GET['view_offers']) ? (int)$_GET['view_offers'] : 0;
+
+    if ($viewOffers > 0) {
+        header('Location: my_projects.php?view_offers=' . $viewOffers . '&msg=rejected');
+    } else {
+        header('Location: my_projects.php?msg=rejected');
+    }
+    exit;
+}
+
 // Fetch client projects with offer count
 $stmt = $pdo->prepare("
     SELECT p.*, 
@@ -52,30 +93,6 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute(array($clientId));
 $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Accept / reject offer
-if (isset($_GET['accept']) && is_numeric($_GET['accept'])) {
-    $offerId = (int)$_GET['accept'];
-
-    $pdo->prepare("UPDATE offers SET status='accepted' WHERE id=?")->execute(array($offerId));
-
-    $pdo->prepare("
-        UPDATE projects SET status='in_progress'
-        WHERE id = (SELECT project_id FROM offers WHERE id=?) AND client_id=?
-    ")->execute(array($offerId, $clientId));
-
-    header('Location: my_projects.php?msg=accepted');
-    exit;
-}
-
-if (isset($_GET['reject']) && is_numeric($_GET['reject'])) {
-    $offerId = (int)$_GET['reject'];
-
-    $pdo->prepare("UPDATE offers SET status='rejected' WHERE id=?")->execute(array($offerId));
-
-    header('Location: my_projects.php?msg=rejected');
-    exit;
-}
 
 // Fetch offers for a selected project
 $selectedOffers  = array();
@@ -102,15 +119,33 @@ if (isset($_GET['view_offers']) && is_numeric($_GET['view_offers'])) {
 }
 
 $statusLabels = array(
-        'open'        => array('label' => 'Open', 'class' => 'badge-open'),
-        'in_progress' => array('label' => 'In Progress', 'class' => 'badge-progress'),
-        'closed'      => array('label' => 'Closed', 'class' => 'badge-closed')
+        'open' => array(
+                'label' => 'Open',
+                'class' => 'badge-open'
+        ),
+        'in_progress' => array(
+                'label' => 'In Progress',
+                'class' => 'badge-progress'
+        ),
+        'completed' => array(
+                'label' => 'Completed',
+                'class' => 'badge-completed'
+        )
 );
 
 $offerStatusLabels = array(
-        'pending'  => array('label' => 'Pending', 'class' => 'badge-pending'),
-        'accepted' => array('label' => 'Accepted', 'class' => 'badge-accepted'),
-        'rejected' => array('label' => 'Rejected', 'class' => 'badge-rejected')
+        'pending' => array(
+                'label' => 'Pending',
+                'class' => 'badge-pending'
+        ),
+        'accepted' => array(
+                'label' => 'Accepted',
+                'class' => 'badge-accepted'
+        ),
+        'rejected' => array(
+                'label' => 'Rejected',
+                'class' => 'badge-rejected'
+        )
 );
 
 $typeLabels = array(
@@ -128,6 +163,7 @@ $typeLabels = array(
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BridgeX — My Projects</title>
+
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/client.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -139,6 +175,7 @@ $typeLabels = array(
         <img src="../assets/images/logo.png" alt="BridgeX" class="logo-img">
         <span class="logo-text">Bridge<span style="color:var(--pink-main)">X</span></span>
     </div>
+
     <nav class="navbar">
         <a href="dashboard.php">Dashboard</a>
         <a href="post_project.php">Post Project</a>
@@ -161,14 +198,15 @@ $typeLabels = array(
                 <div class="alert alert-success">✅ Offer accepted successfully and project status updated.</div>
             <?php elseif ($_GET['msg'] === 'rejected'): ?>
                 <div class="alert alert-error">❌ Offer rejected.</div>
-                <?php if ($reviewSuccess): ?>
-                    <div class="alert alert-success"><?= htmlspecialchars($reviewSuccess) ?></div>
-                <?php endif; ?>
-
-                <?php if ($reviewError): ?>
-                    <div class="alert alert-error"><?= htmlspecialchars($reviewError) ?></div>
-                <?php endif; ?>
             <?php endif; ?>
+        <?php endif; ?>
+
+        <?php if ($reviewSuccess): ?>
+            <div class="alert alert-success"><?= htmlspecialchars($reviewSuccess) ?></div>
+        <?php endif; ?>
+
+        <?php if ($reviewError): ?>
+            <div class="alert alert-error"><?= htmlspecialchars($reviewError) ?></div>
         <?php endif; ?>
 
         <?php if (empty($projects)): ?>
@@ -183,7 +221,7 @@ $typeLabels = array(
             <div class="projects-list">
                 <?php foreach ($projects as $proj): ?>
                     <?php
-                    $projectStatus = isset($proj['status']) ? $proj['status'] : 'open';
+                    $projectStatus = isset($proj['status']) ? strtolower(trim($proj['status'])) : 'open';
 
                     if (isset($statusLabels[$projectStatus])) {
                         $st = $statusLabels[$projectStatus];
@@ -202,6 +240,7 @@ $typeLabels = array(
                         <div class="project-row-header">
                             <div>
                                 <span class="badge <?= $st['class'] ?>"><?= htmlspecialchars($st['label']) ?></span>
+
                                 <h3 class="project-title"><?= htmlspecialchars($proj['title']) ?></h3>
                                 <span class="project-meta">
                                     <?= htmlspecialchars($projectTypeLabel) ?> · <?= date('d/m/Y', strtotime($proj['created_at'])) ?>
@@ -216,10 +255,12 @@ $typeLabels = array(
                             </div>
                         </div>
 
-                        <p class="project-desc"><?= nl2br(htmlspecialchars(mb_substr($proj['description'], 0, 160))) ?>...</p>
+                        <p class="project-desc">
+                            <?= nl2br(htmlspecialchars(mb_substr($proj['description'], 0, 160))) ?>...
+                        </p>
 
                         <div class="project-tracker">
-                            <div class="tracker-step <?= in_array($projectStatus, array('open', 'in_progress', 'closed')) ? 'done' : '' ?>">
+                            <div class="tracker-step <?= in_array($projectStatus, array('open', 'in_progress', 'completed')) ? 'done' : '' ?>">
                                 <span class="tracker-dot"></span>
                                 <span>Posted</span>
                             </div>
@@ -233,14 +274,14 @@ $typeLabels = array(
 
                             <div class="tracker-line"></div>
 
-                            <div class="tracker-step <?= in_array($projectStatus, array('in_progress', 'closed')) ? 'done' : '' ?>">
+                            <div class="tracker-step <?= in_array($projectStatus, array('in_progress', 'completed')) ? 'done' : '' ?>">
                                 <span class="tracker-dot"></span>
                                 <span>Offer Accepted</span>
                             </div>
 
                             <div class="tracker-line"></div>
 
-                            <div class="tracker-step <?= $projectStatus === 'closed' ? 'done' : '' ?>">
+                            <div class="tracker-step <?= $projectStatus === 'completed' ? 'done' : '' ?>">
                                 <span class="tracker-dot"></span>
                                 <span>Completed</span>
                             </div>
@@ -296,15 +337,19 @@ $typeLabels = array(
 
                                     <div class="offer-details-row">
                                         <span class="offer-detail">
-                                            <strong>💰 Price:</strong> <?= htmlspecialchars($offer['price']) ?> SAR
+                                            <strong>💰 Price:</strong>
+                                            <?= htmlspecialchars($offer['price']) ?> SAR
                                         </span>
 
                                         <span class="offer-detail">
-                                            <strong>⏱ Duration:</strong> <?= htmlspecialchars($offer['delivery_time']) ?>
+                                            <strong>⏱ Duration:</strong>
+                                            <?= htmlspecialchars($offer['delivery_time']) ?>
                                         </span>
                                     </div>
 
-                                    <p class="offer-message"><?= nl2br(htmlspecialchars($offer['message'])) ?></p>
+                                    <p class="offer-message">
+                                        <?= nl2br(htmlspecialchars($offer['message'])) ?>
+                                    </p>
 
                                     <?php if ($offerStatus === 'pending'): ?>
                                         <div class="offer-actions">
@@ -312,7 +357,6 @@ $typeLabels = array(
                                                class="btn-accept"
                                                onclick="return confirm('Are you sure you want to accept this offer?')">
                                                 ✅ Accept Offer
-
                                             </a>
 
                                             <a href="my_projects.php?reject=<?= $offer['id'] ?>&view_offers=<?= $selectedProject['id'] ?>"
@@ -322,12 +366,13 @@ $typeLabels = array(
                                             </a>
                                         </div>
                                     <?php endif; ?>
-                                    <?php if ($offerStatus === 'accepted'): ?>
+
+                                    <?php if ($offerStatus === 'accepted' && $selectedProject['status'] === 'completed'): ?>
                                         <?php
                                         $reviewCheck = $pdo->prepare("
-        SELECT id FROM reviews
-        WHERE project_id = ? AND client_id = ? AND developer_id = ?
-    ");
+                                            SELECT id FROM reviews
+                                            WHERE project_id = ? AND client_id = ? AND developer_id = ?
+                                        ");
                                         $reviewCheck->execute(array($selectedProject['id'], $clientId, $offer['developer_id']));
                                         $alreadyReviewed = $reviewCheck->fetch();
                                         ?>
@@ -357,6 +402,7 @@ $typeLabels = array(
                                             </form>
                                         <?php endif; ?>
                                     <?php endif; ?>
+
                                 </div>
                             <?php endforeach; ?>
                         </div>

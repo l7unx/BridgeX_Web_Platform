@@ -322,9 +322,11 @@
     font-size: 12px;
     font-weight: 600;
 }
+
+
 .badge-open     { background: rgba(78,205,196,0.12); color:#7ee8e2; border:1px solid rgba(78,205,196,0.3); }
 .badge-progress { background: rgba(255,200,50,0.12);  color:#ffd93d; border:1px solid rgba(255,200,50,0.3); }
-.badge-closed   { background: rgba(174,183,194,0.10); color:#aeb7c2; border:1px solid rgba(174,183,194,0.3); }
+.badge-completed { background: rgba(92,214,92,0.18); color:#5cd65c; border:1px solid rgba(92,214,92,0.55); }
 .badge-pending  { background: rgba(255,200,50,0.12);  color:#ffd93d; border:1px solid rgba(255,200,50,0.3); }
 .badge-accepted { background: rgba(78,205,196,0.12); color:#7ee8e2; border:1px solid rgba(78,205,196,0.3); }
 .badge-rejected { background: rgba(255,107,107,0.12); color:#ff9090; border:1px solid rgba(255,107,107,0.3); }

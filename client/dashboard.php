@@ -6,10 +6,16 @@ $userName = getUserName();
 $pdo = getDB();
 $clientId = getUserId();
 
-$stmt = $pdo->prepare("SELECT COUNT(*) FROM projects WHERE client_id = ?");
+/* Total Projects */
+$stmt = $pdo->prepare("
+    SELECT COUNT(*)
+    FROM projects
+    WHERE client_id = ?
+");
 $stmt->execute(array($clientId));
 $totalProjects = $stmt->fetchColumn();
 
+/* Received Offers */
 $stmt = $pdo->prepare("
     SELECT COUNT(o.id)
     FROM offers o
@@ -19,11 +25,23 @@ $stmt = $pdo->prepare("
 $stmt->execute(array($clientId));
 $totalOffers = $stmt->fetchColumn();
 
-$stmt = $pdo->prepare("SELECT COUNT(*) FROM projects WHERE client_id = ? AND status = 'in_progress'");
+/* Active Projects */
+$stmt = $pdo->prepare("
+    SELECT COUNT(*)
+    FROM projects
+    WHERE client_id = ?
+      AND status = 'in_progress'
+");
 $stmt->execute(array($clientId));
 $activeProjects = $stmt->fetchColumn();
 
-$stmt = $pdo->prepare("SELECT COUNT(*) FROM projects WHERE client_id = ? AND status = 'closed'");
+/* Completed Projects */
+$stmt = $pdo->prepare("
+    SELECT COUNT(*)
+    FROM projects
+    WHERE client_id = ?
+      AND status = 'completed'
+");
 $stmt->execute(array($clientId));
 $doneProjects = $stmt->fetchColumn();
 ?>
