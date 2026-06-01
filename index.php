@@ -21,13 +21,13 @@
         </p>
 
         <div class="hero-buttons">
-            <a href="/bridgx/register.php" class="primary-btn">Get Started</a>
-            <a href="/bridgx/about.php" class="secondary-btn">Explore More</a>
+            <a href="/bridgex/register.php" class="primary-btn">Get Started</a>
+            <a href="/bridgex/about.php" class="secondary-btn">Explore More</a>
         </div>
     </div>
 
     <div class="hero-image-card">
-        <img src="/bridgx/assets/images/hero-visual.jpg" alt="BridgeX platform visual">
+        <img src="/bridgex/assets/images/hero-visual.jpg" alt="BridgeX platform visual">
 
     </div>
 </section>
@@ -97,7 +97,7 @@
 <section class="cta-section">
     <h2>Ready to build your next digital project?</h2>
     <p>Start with a clear idea, receive better offers, and manage your project with confidence.</p>
-    <a href="/bridgx/register.php" class="primary-btn">Create Your Account</a>
+    <a href="/bridgex/register.php" class="primary-btn">Create Your Account</a>
 </section>
 
 <script src="/bridgex/assets/js/script.js"></script>
