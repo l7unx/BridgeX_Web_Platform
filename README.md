@@ -176,10 +176,10 @@ BridgeX was developed collaboratively as a team project.
 
 My main contributions to the project included:
 
-* 👤 Designing and developing the complete **Client section** of the platform.
-* 🔄 Implementing the client-side workflow for interacting with projects and developer offers.
-* 🎨 Contributing to the user interface and overall client experience.
-* 🖼️ Designing the **project poster**.
-* 🤝 Making additional minor contributions and adjustments to other parts of the platform during development.
+- 👤 Designing and developing the complete **Client section** of the platform.
+- 🔄 Implementing the client-side workflow for interacting with projects and developer offers.
+- 🎨 Contributing to the user interface and overall client experience.
+- 🖼️ Designing and implementing the slider.
+- 🤝 Making additional minor contributions and adjustments to other parts of the platform during development.
 
 
