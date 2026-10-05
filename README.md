@@ -4,6 +4,19 @@
 
 Clients can publish projects with their requirements, budget, and expected duration, while developers can browse available projects and submit offers. The platform also provides project management, reviews, and administrative features.
 
+## 📸 Screenshots
+
+### Home Page
+![BridgeX Home Page](Home-page.png)
+
+### Client Dashboard
+![BridgeX Client Dashboard](Client-dashboard.png)
+
+### Post Project
+![BridgeX Post Project](Post-project.png)
+
+### Database Schema
+![BridgeX Database Schema](database-schema.png)
 ## ✨ Features
 
 ### 👤 Client
